@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>1</minor>
+  </specVersion>
+
+  <device>
+    <deviceType>urn:iot_projekat:device:sensors:1</deviceType>
+    <friendlyName>Dust Sensor</friendlyName>
+    <UDN>uuid:1f3548e2-442f-4fe3-8d65-49b78c48c3ea::urn:iot_projekat:device:sensors:1</UDN>
+  </device>
+</root>

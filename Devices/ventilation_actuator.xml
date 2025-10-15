@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>1</minor>
+  </specVersion>
+
+  <device>
+    <deviceType>urn:iot_projekat:device:actuators:1</deviceType>
+    <friendlyName>Ventilation Actuator</friendlyName>
+    <UDN>uuid:a50acac6-9c29-48dd-b819-1be6f46769c2::urn:iot_projekat:device:actuators:1</UDN>
+  </device>
+</root>

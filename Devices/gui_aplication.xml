@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>1</minor>
+  </specVersion>
+
+  <device>
+    <deviceType>urn:iot_projekat:device:gui:1</deviceType>
+    <friendlyName>GUI Application</friendlyName>
+    <UDN>uuid:41b96678-08b9-4f7b-82a7-d6c09919095f::urn:iot_projekat:device:gui:1</UDN>
+  </device>
+</root>

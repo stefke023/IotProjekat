@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>1</minor>
+  </specVersion>
+
+  <device>
+    <deviceType>urn:iot_projekat:device:actuators:1</deviceType>
+    <friendlyName>Alarm Actuator</friendlyName>
+    <UDN>uuid:bb3ff8b2-2719-4be4-9609-cf819bc95c4a::urn:iot_projekat:device:actuators:1</UDN>
+  </device>
+</root>
