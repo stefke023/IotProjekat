@@ -1,4 +1,4 @@
-# IotProjekat
+# IotProject
 A simulation of an IoT (Internet of Things) system built in Python using multiple terminal instances to represent networked devices.
 
 Overview
