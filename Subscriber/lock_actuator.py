@@ -5,30 +5,30 @@ sys.path.append(".")
 from ssdp import *
 from udp import *
 
-THEME_VENTILATION = "actuators/ventilation/commands"
+TOPIC_LOCK = "actuators/zone/lock"
 PORT = 1883
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print("Aktuator ventilacija: Povezan na MQTT Broker.")
+        print("Aktuator kljuc: Povezan na MQTT Broker.")
     else:
         print(f"Greška pri povezivanju sa kodom: {rc}")
         return 
     
-    client.subscribe(THEME_VENTILATION)
-    print(f"Pretplacen na temu: {THEME_VENTILATION}")
+    client.subscribe(TOPIC_LOCK)
+    print(f"Pretplacen na temu: {TOPIC_LOCK}")
     
 def on_message(client, userdata, msg):
     try: 
         json_message = msg.payload.decode('utf-8')
         data = json.loads(json_message)
         
-        ventilation_active = data.get("aktiviraj")
+        is_locked = data.get("aktiviraj")
         
-        if ventilation_active: 
-            print("Ventilacija je upaljena.")
+        if is_locked: 
+            print("Gradiliste je zakljucano.")
         else: 
-            print("Ventilacija je ugasena.")
+            print("Gradiliste je otkljucano.")
         
     except json.JSONDecodeError:
         print(" Greška u parsiranju JSON poruke.")
@@ -39,7 +39,7 @@ def on_message(client, userdata, msg):
 
 def main(): 
     s = "urn:iot_projekat:device:actuators:1"
-    u = f"uuid:a50acac6-9c29-48dd-b819-1be6f46769c2::{s}"
+    u = f"uuid:d94a1f6e-3e21-4c67-8c6f-5e0b2d91a8f3::{s}"
     ssdp_client = SSDP(st = s, usn = u)
     
     broker_address = ssdp_client.serve()

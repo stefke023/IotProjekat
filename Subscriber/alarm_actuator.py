@@ -1,14 +1,12 @@
 import paho.mqtt.client as mqtt
 import json
 import sys
-sys.path.append("..")
+sys.path.append(".")
 from ssdp import *
 from udp import *
 
 PORT = 1883
-THEME_ALARM = "aktuatori/alarm/aktivacija"
-
-
+TOPIC_ALARM = "actuators/alarm/commands"
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -17,8 +15,8 @@ def on_connect(client, userdata, flags, rc):
         print(f"Greška pri povezivanju sa kodom: {rc}")
         return 
     
-    client.subscribe(THEME_ALARM)
-    print(f"Pretplacen na temu: {THEME_ALARM}")
+    client.subscribe(TOPIC_ALARM)
+    print(f"Pretplacen na temu: {TOPIC_ALARM}")
     
 def on_message(client, userdata, msg):
     

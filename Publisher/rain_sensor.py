@@ -3,31 +3,31 @@ import json
 import time
 import os
 import sys
-sys.path.append("..")
+sys.path.append(".")
 from ssdp import *
 from udp import *
 
+# MQTT podešavanja
+TOPIC_RAIN = "sensors/weather/rain"
+DATA_FILE = "rain_level.txt"
 PORT = 1883
-TOPIC_GAS = "senzori/gas/nivo"
-DATA_FILE = "gas_level.txt"
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print("Senzor opasnih gasova: Povezan na MQTT Broker.")
+        print("Senzor nivoa kise: Povezan na MQTT Broker.")
     else:
         print(f"Greška pri povezivanju sa kodom: {rc}")
 
 def send_data_from_file(client, data_file, topic):
-    curr_dir = os.getcwd()
+    curr_dir = os.getcwd() + "/Publisher/" 
     data_path = os.path.join(curr_dir, data_file)
     try:
         with open(data_path, 'r') as f:
-            print(f"Čitam podatke iz fajla: {data_file}")
             for line in f:
                 try:
-                    gas_level = float(line.strip())
+                    rain_level = float(line.strip())
                     data = {
-                        "nivo opasnih gasova": gas_level
+                        "nivo kise": rain_level
                     }
                     json_message = json.dumps(data)
                     client.publish(topic, json_message)
@@ -39,13 +39,13 @@ def send_data_from_file(client, data_file, topic):
                     continue
 
     except FileNotFoundError:
-        print(f"Greška: Fajl '{data_file}' nije pronađen.")
+        print(f"Greška: Fajl '{data_path}' nije pronađen.")
     except Exception as e:
         print(f"Došlo je do neočekivane greške: {e}")
 
 def main():
     s = "urn:iot_projekat:device:sensors:1"
-    u = f"uuid:8130ef32-2e70-4869-998f-bc1edec96316::{s}"
+    u = f"uuid:1f3548e2-442f-4fe3-8d65-49b78c48c3ea::{s}"
     ssdp_client = SSDP(st = s, usn = u)
     
     broker_address = ssdp_client.serve()
@@ -57,7 +57,7 @@ def main():
     if not get_activation_information(): 
         print("Nisu svi uredjaji u sistemu. Pozovite administratora.")
         return
-        
+
     client = mqtt.Client()
     client.on_connect = on_connect
 
@@ -69,7 +69,7 @@ def main():
 
     client.loop_start()
 
-    send_data_from_file(client, DATA_FILE, TOPIC_GAS)
+    send_data_from_file(client, DATA_FILE, TOPIC_RAIN)
 
     client.loop_stop()
     client.disconnect()

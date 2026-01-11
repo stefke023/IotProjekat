@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>1</minor>
+  </specVersion>
+
+  <device>
+    <deviceType>urn:iot_projekat:device:actuators:1</deviceType>
+    <friendlyName>Lock Actuator</friendlyName>
+    <UDN>uuid:d94a1f6e-3e21-4c67-8c6f-5e0b2d91a8f3::urn:iot_projekat:device:actuators:1</UDN>
+  </device>
+</root>

@@ -7,7 +7,7 @@
 
   <device>
     <deviceType>urn:iot_projekat:device:sensors:1</deviceType>
-    <friendlyName>Gas Sensor</friendlyName>
+    <friendlyName>Lightning Sensor</friendlyName>
     <UDN>uuid:8130ef32-2e70-4869-998f-bc1edec96316::urn:iot_projekat:device:sensors:1</UDN>
   </device>
 </root>
