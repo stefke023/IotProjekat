@@ -4,8 +4,11 @@ import sys
 sys.path.append(".")
 from ssdp import *
 from udp import *
+import threading
+import os
 
-THEME_VENTILATION = "actuators/ventilation/commands"
+TOPIC_VENTILATION = "actuators/ventilation/commands"
+TOPIC_SHUTDOWN = "system/shutdown"
 PORT = 1883
 
 def on_connect(client, userdata, flags, rc):
@@ -15,13 +18,18 @@ def on_connect(client, userdata, flags, rc):
         print(f"Greška pri povezivanju sa kodom: {rc}")
         return 
     
-    client.subscribe(THEME_VENTILATION)
-    print(f"Pretplacen na temu: {THEME_VENTILATION}")
+    client.subscribe(TOPIC_VENTILATION)
+    print(f"Pretplacen na temu: {TOPIC_VENTILATION}")
+    client.subscribe(TOPIC_SHUTDOWN)
     
 def on_message(client, userdata, msg):
     try: 
         json_message = msg.payload.decode('utf-8')
         data = json.loads(json_message)
+
+        if msg.topic == TOPIC_SHUTDOWN: 
+            print("Nisu svi uredjaji u sistemu. Pozovite administratora.")
+            os._exit(1)
         
         ventilation_active = data.get("aktiviraj")
         
@@ -51,6 +59,9 @@ def main():
     if not get_activation_information(): 
         print("Nisu svi uredjaji u sistemu. Pozovite administratora.")
         return
+    
+    threading.Thread(target=ssdp_client.advertise, daemon=True).start()
+
     
     client = mqtt.Client()
     client.on_connect = on_connect

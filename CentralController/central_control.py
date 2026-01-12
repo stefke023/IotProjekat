@@ -6,6 +6,8 @@ import re
 sys.path.append(".")
 from ssdp import *
 from udp import *
+import threading
+import os
 
 #----------------------------------GLOBAL DEFINE------------------------------
 
@@ -31,6 +33,7 @@ TOPIC_ALARM = "actuators/alarm/commands"
 TOPIC_LOCK = "actuators/zone/lock"
 TOPIC_VENTILATION = "actuators/ventilation/commands"
 TOPIC_SYSTEM = "system/status/info"
+TOPIC_SHUTDOWN = "system/shutdown"
 
 
 ACTIVATION_ON = {
@@ -39,6 +42,11 @@ ACTIVATION_ON = {
 
 ACTIVATION_OFF = {
     "aktiviraj" : False
+}
+
+
+SHUTDOWN = {
+    "ugasi se" : True
 }
 
 system_info = {
@@ -132,6 +140,19 @@ def on_message(client, userdata, msg):
 
     json_message_system = json.dumps(system_info)
     client.publish(TOPIC_SYSTEM, json_message_system)
+
+def const_check(ssdp_host, client):
+    end = False
+
+    while not end:
+        current_usn = ssdp_host.listen()
+
+        for usn in DEVICES_USN:
+            if usn not in current_usn:
+                print("Nemamo sve potrebne elemente za nas sistem. Proverite konekcije.")
+                json_shutdown = json.dumps(SHUTDOWN)
+                client.publish(TOPIC_SHUTDOWN, json_shutdown)
+                os._exit(1)
         
 def main(): 
     ssdp_host = SSDP()
@@ -168,6 +189,8 @@ def main():
     client.on_connect = on_connect
     client.on_message = on_message
     client.connect(broker_address, port, 60)
+
+    threading.Thread(target = const_check, args=(ssdp_host, client) , daemon=True).start()
     client.loop_forever()
         
 if __name__ == "__main__":

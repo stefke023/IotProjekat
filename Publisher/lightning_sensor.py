@@ -6,9 +6,11 @@ import sys
 sys.path.append(".")
 from ssdp import *
 from udp import *
+import threading
 
 PORT = 1883
 TOPIC_LIGHTNING = "sensors/lightning/event"
+TOPIC_SHUTDOWN = "system/shutdown"
 DATA_FILE = "lightning.txt"
 
 def on_connect(client, userdata, flags, rc):
@@ -16,6 +18,23 @@ def on_connect(client, userdata, flags, rc):
         print("Senzor udara groma: Povezan na MQTT Broker.")
     else:
         print(f"Greška pri povezivanju sa kodom: {rc}")
+        client.subscribe(TOPIC_SHUTDOWN)
+
+def on_message(client, userdata, msg):
+    try:
+        json_message = msg.payload.decode('utf-8')
+        data = json.loads(json_message)
+    
+        if msg.topic == TOPIC_SHUTDOWN: 
+            print("Nisu svi uredjaji u sistemu. Pozovite administratora.")
+            os._exit(1)
+        
+    except json.JSONDecodeError:
+        print(" Greška u parsiranju JSON poruke.")
+        return
+    except Exception as e:
+        print(f"Došlo je do neočekivane greške: {e}")
+        return
 
 def send_data_from_file(client, data_file, topic):
     curr_dir =  os.getcwd() + "/Publisher/"
@@ -60,12 +79,17 @@ def main():
         
     client = mqtt.Client()
     client.on_connect = on_connect
+    client.on_message = on_message
+
 
     try:
         client.connect(broker_address, PORT, 60)
     except Exception as e:
         print(f"Greška pri povezivanju na broker: {e}")
         return
+
+    threading.Thread(target=ssdp_client.advertise, daemon=True).start()
+
 
     client.loop_start()
 

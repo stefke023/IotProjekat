@@ -8,6 +8,8 @@ import sys
 sys.path.append(".")
 from ssdp import *
 from udp import *
+import os
+
 
 #---------------------------------------GLOBAL DEFINE-----------------------------------------
 
@@ -39,6 +41,8 @@ style = None
 root = None
 
 TOPIC_SYSTEM = "system/status/info"
+TOPIC_SHUTDOWN = "system/shutdown"
+
 
 
 #--------------------------------------UI FUNCTIONS---------------------------------------
@@ -114,11 +118,16 @@ def on_connect(client, userdata, flags, rc):
     
     client.subscribe(TOPIC_SYSTEM)
     print(f"Pretplacen na temu: {TOPIC_SYSTEM}")
+    client.subscribe(TOPIC_SHUTDOWN)
     
 def on_message(client, userdata, msg):
     try: 
         json_message = msg.payload.decode('utf-8')
         data = json.loads(json_message)
+
+        if msg.topic == TOPIC_SHUTDOWN: 
+            print("Nisu svi uredjaji u sistemu. Pozovite administratora.")
+            os._exit(1)
         
         alarm_active = data.get("alarm aktivan")
         ventilation_active = data.get("ventilation aktivan")
@@ -191,6 +200,9 @@ def mqtt_thread():
     if not get_activation_information(): 
         print("Nisu svi uredjaji u sistemu. Pozovite administratora.")
         return
+    
+    threading.Thread(target=ssdp_client.advertise, daemon=True).start()
+    
     
     client = mqtt.Client()
     client.on_connect = on_connect
