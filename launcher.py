@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 def usage():
-    print("Usage: python launcher.py [host|remote]")
+    print("Usage: python launcher.py [host|publisher|subscriber]")
     sys.exit(1)
 
 def main():
@@ -11,7 +11,7 @@ def main():
         usage()
 
     mode = sys.argv[1].lower()
-    if mode not in ("host", "remote"):
+    if mode not in ("host", "publisher", "subscriber"):
         usage()
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -20,15 +20,18 @@ def main():
         "host": [
             "CentralController/central_control.py",
         ],
-        "remote": [
+        "publisher": [
             "Publisher/lightning_sensor.py",
             "Publisher/moisture_sensor.py",
             "Publisher/rain_sensor.py",
+        ],
+
+        "subscriber" : [
             "Subscriber/alarm_actuator.py", 
             "Subscriber/gui_aplication.py",
             "Subscriber/ventilation_actuator.py",
             "Subscriber/lock_actuator.py"
-        ],
+        ]
     }
 
     scripts = scripts_by_mode[mode]
