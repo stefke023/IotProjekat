@@ -175,11 +175,10 @@ def main():
     for usn in DEVICES_USN: 
         if usn not in devices:
             all_connected = False
-            print(usn)
             break
     
     if not all_connected:
-        print("Nemamo sve potrebne elemente za nas sistem. Proverite konekcije.")
+        print("Na pocetnoj proveri nemamo sve potrebne elemente za nas sistem. Proverite konekcije.")
         send_activation_information("System ready: FALSE")
         return 
 

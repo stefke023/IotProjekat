@@ -198,8 +198,8 @@ def mqtt_thread():
         return 
     
     if not get_activation_information(): 
-        print("Nisu svi uredjaji u sistemu. Pozovite administratora.")
-        return
+        print("Na pocetnoj proveri nemamo sve potrebne elemente za nas sistem. Proverite konekcije.")
+        os._exit(1)
     
     threading.Thread(target=ssdp_client.advertise, daemon=True).start()
     

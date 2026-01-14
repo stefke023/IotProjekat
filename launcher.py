@@ -23,7 +23,7 @@ def main():
         "publisher": [
             "Publisher/lightning_sensor.py",
             "Publisher/moisture_sensor.py",
-            "Publisher/rain_sensor.py",
+             "Publisher/rain_sensor.py", 
         ],
 
         "subscriber" : [

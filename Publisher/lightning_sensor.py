@@ -74,7 +74,7 @@ def main():
         return 
     
     if not get_activation_information(): 
-        print("Nisu svi uredjaji u sistemu. Pozovite administratora.")
+        print("Na pocetnoj proveri nemamo sve potrebne elemente za nas sistem. Proverite konekcije.")
         return
         
     client = mqtt.Client()
