@@ -28,7 +28,7 @@ def main():
 
         "subscriber" : [
             "Subscriber/alarm_actuator.py", 
-            "Subscriber/gui_aplication.py",
+            "Subscriber/gui_application.py",
             "Subscriber/ventilation_actuator.py",
             "Subscriber/lock_actuator.py"
         ]
